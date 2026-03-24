@@ -25,21 +25,29 @@
 
 Проект построен по классической трехуровневой микросервисной архитектуре с разделением на Frontend и Backend.
 
-```mermaid
-graph TD
-    Client[Browser / Client] -->|HTTP / REST API| UI[Angular 17 SPA]
-    
-    subgraph Frontend
-        UI -->|RxJS + HttpClient| AuthGuard[Auth Guard / JWT Interceptor]
-        AuthGuard -->|Authorization: Bearer| API_Gateway
-    end
-    
-    subgraph Backend Core [Spring Boot 3]
-        API_Gateway((API Endpoints)) --> Sec[Spring Security]
-        Sec --> Ctrl[Controllers]
-        Ctrl --> Services[Business Logic / State Machine]
-        Services --> JPA[Spring Data JPA]
-    end
-    
-    Frontend -.->|JSON / REST| Backend Core
-    JPA -->|TCP / 5433| DB[(PostgreSQL)]
+---
+
+## 🛠 Технологический стек
+
+### Backend
+* **Java 21** & **Spring Boot 3**
+* **Spring Security & JWT** (Безопасность и авторизация)
+* **Spring Data JPA / Hibernate** (Работа с БД)
+* **PostgreSQL** (Основная база данных)
+
+### Frontend
+* **Angular 17** (Standalone Components)
+* **RxJS** (Реактивное программирование и State Management)
+* **Tailwind CSS** (Стилизация и адаптивная верстка)
+
+---
+
+## 🚀 Как запустить проект локально
+
+### Быстрый запуск через Docker
+Для этого способа вам нужен только установленный Docker Desktop.
+1. Откройте терминал в корневой папке проекта (где находится файл `docker-compose.yml`).
+2. Выполните команду:
+   ```bash
+   docker-compose up --build
+   ```
