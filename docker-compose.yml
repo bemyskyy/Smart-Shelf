@@ -1,0 +1,43 @@
+services:
+  # База данных
+  db:
+    image: postgres:15-alpine
+    container_name: smart-shelf-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: smart_shelf
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Spring Boot
+  backend:
+    build:
+      context: ./smart-shelf-backend
+      dockerfile: Dockerfile
+    container_name: smart-shelf-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/smart_shelf
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  # Angular
+  frontend:
+    build:
+      context: ./smart-shelf-ui
+      dockerfile: Dockerfile
+    container_name: smart-shelf-ui
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
