@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './features/home/home.component';
 import { AuthComponent } from './features/auth/auth.component';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { CatalogComponent } from './features/catalog/catalog.component';
@@ -9,6 +10,8 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+
   {
     path: 'login',
     component: AuthComponent,

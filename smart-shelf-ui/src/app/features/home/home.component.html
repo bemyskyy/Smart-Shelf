@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-white">
+
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+
+        <div class="flex items-center gap-2 text-primary font-bold text-2xl tracking-tight">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+          SmartShelf
+        </div>
+
+        <div class="flex items-center gap-4">
+          <a routerLink="/login" class="text-gray-600 hover:text-primary font-medium px-4 py-2 transition-colors">
+            Войти
+          </a>
+          <a routerLink="/catalog" class="bg-primary text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm hidden sm:block">
+            Перейти в каталог
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="relative pt-20 pb-32 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-primary font-medium text-sm mb-8 border border-blue-100 shadow-sm">
+          🚀 Платформа для обмена вещами
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
+          Шеринг вещей <br class="hidden sm:block">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">внутри команды</span>
+        </h1>
+
+        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 mb-10">
+          Хватит покупать то, что нужно на один раз. Берите инструменты, книги и настолки у коллег. Делитесь своими вещами и делайте мир экологичнее!
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a routerLink="/catalog" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-1">
+            Начать обмен
+          </a>
+          <a href="#how-it-works" class="bg-gray-100 text-gray-800 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all">
+            Как это работает?
+          </a>
+        </div>
+      </div>
+
+      <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none -z-10">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
+        <div class="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob" style="animation-delay: 4s;"></div>
+      </div>
+    </div>
+
+    <div id="how-it-works" class="bg-gray-50 py-24 border-t border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900">Всё очень просто</h2>
+          <p class="mt-4 text-gray-500 text-lg">Три шага к умному потреблению</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-blue-100 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">1. Найдите вещь</h3>
+            <p class="text-gray-500 leading-relaxed">Поиск по каталогу доступных вещей. От перфоратора для ремонта до редкой IT-книги.</p>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform -rotate-3">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">2. Отправьте запрос</h3>
+            <p class="text-gray-500 leading-relaxed">Владелец получит мгновенное уведомление в Центре обмена и одобрит вашу заявку.</p>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">3. Пользуйтесь</h3>
+            <p class="text-gray-500 leading-relaxed">Встретьтесь в офисе, заберите вещь, пользуйтесь с удовольствием и верните в срок!</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

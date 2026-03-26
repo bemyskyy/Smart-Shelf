@@ -1,0 +1,4087 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: node_modules, .git, dist, build
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+smart-shelf-backend/
+  .mvn/
+    wrapper/
+      maven-wrapper.properties
+  src/
+    main/
+      java/
+        com/
+          endacheva/
+            smart_shelf/
+              config/
+                ApplicationConfig.java
+                DataInitializer.java
+                SecurityConfig.java
+              controller/
+                AuthController.java
+                BorrowController.java
+                ItemController.java
+              dto/
+                record/
+                  BorrowRequestCreate.java
+                  BorrowRequestResponse.java
+                  ItemRequest.java
+                  ItemResponse.java
+                AuthRequest.java
+                AuthResponse.java
+                ErrorResponse.java
+              exception/
+                GlobalExceptionHandler.java
+              model/
+                enums/
+                  ItemStatus.java
+                  RequestStatus.java
+                BorrowRequest.java
+                Item.java
+                User.java
+              repository/
+                BorrowRequestRepository.java
+                ItemRepository.java
+                UserRepository.java
+              security/
+                AuthEntryPointJwt.java
+                JwtAuthenticationFilter.java
+                JwtUtil.java
+              service/
+                AuthService.java
+                BorrowService.java
+                ItemService.java
+              SmartShelfApplication.java
+      resources/
+        application.yaml
+    test/
+      java/
+        com/
+          endacheva/
+            smart_shelf/
+              SmartShelfApplicationTests.java
+  .gitattributes
+  .gitignore
+  Dockerfile
+  mvnw
+  mvnw.cmd
+  pom.xml
+smart-shelf-ui/
+  .vscode/
+    extensions.json
+    launch.json
+    tasks.json
+  public/
+    favicon.ico
+  src/
+    app/
+      core/
+        guards/
+          auth.guard.ts
+          guest.guard.ts
+        interceptors/
+          jwt.interceptor.ts
+        models/
+          auth.model.ts
+          borrow.model.ts
+          item.model.ts
+        services/
+          auth.service.ts
+          borrow.service.ts
+          item.service.ts
+          toast.service.ts
+      features/
+        auth/
+          auth.component.html
+          auth.component.scss
+          auth.component.spec.ts
+          auth.component.ts
+        catalog/
+          catalog.component.html
+          catalog.component.scss
+          catalog.component.spec.ts
+          catalog.component.ts
+        my-items/
+          my-items.component.html
+          my-items.component.scss
+          my-items.component.spec.ts
+          my-items.component.ts
+        not-found/
+          not-found.component.html
+          not-found.component.scss
+          not-found.component.spec.ts
+          not-found.component.ts
+        requests/
+          requests.component.html
+          requests.component.scss
+          requests.component.spec.ts
+          requests.component.ts
+      shared/
+        components/
+          layout/
+            layout.component.html
+            layout.component.scss
+            layout.component.spec.ts
+            layout.component.ts
+          toast/
+            toast.component.html
+            toast.component.scss
+            toast.component.spec.ts
+            toast.component.ts
+      app.config.server.ts
+      app.config.ts
+      app.html
+      app.routes.server.ts
+      app.routes.ts
+      app.scss
+      app.spec.ts
+      app.ts
+    environments/
+      environment.development.ts
+      environment.ts
+    index.html
+    main.server.ts
+    main.ts
+    server.ts
+    styles.scss
+  .editorconfig
+  .gitignore
+  angular.json
+  Dockerfile
+  nginx.conf
+  package.json
+  README.md
+  tailwind.config.js
+  tsconfig.app.json
+  tsconfig.json
+  tsconfig.spec.json
+docker-compose.yml
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="smart-shelf-backend/.mvn/wrapper/maven-wrapper.properties">
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.14/apache-maven-3.9.14-bin.zip
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/config/ApplicationConfig.java">
+package com.endacheva.smart_shelf.config;
+
+import com.endacheva.smart_shelf.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+@RequiredArgsConstructor
+public class ApplicationConfig {
+
+    private final UserRepository userRepository;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/config/DataInitializer.java">
+package com.endacheva.smart_shelf.config;
+
+import com.endacheva.smart_shelf.model.Item;
+import com.endacheva.smart_shelf.model.User;
+import com.endacheva.smart_shelf.model.enums.ItemStatus;
+import com.endacheva.smart_shelf.repository.ItemRepository;
+import com.endacheva.smart_shelf.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class DataInitializer implements CommandLineRunner {
+
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void run(String... args) {
+        if (userRepository.count() > 0) {
+            log.info("База данных уже инициализирована, пропускаем загрузку тестовых данных.");
+            return;
+        }
+
+        log.info("Загрузка тестовых пользователей и инвентаря...");
+
+        User maria = User.builder()
+                .username("maria_endacheva")
+                .password(passwordEncoder.encode("12345"))
+                .build();
+
+        User petr = User.builder()
+                .username("petr_popkin")
+                .password(passwordEncoder.encode("12345"))
+                .build();
+
+        userRepository.saveAll(List.of(maria, petr));
+
+        Item mariaItem1 = Item.builder()
+                .title("Книга 'Чистая архитектура'")
+                .description("Роберт Мартин. Состояние идеальное, прочитана один раз.")
+                .owner(maria)
+                .status(ItemStatus.AVAILABLE)
+                .build();
+
+        Item mariaItem2 = Item.builder()
+                .title("Перфоратор Makita")
+                .description("Мощный, с набором буров. Возвращать чистым!")
+                .owner(maria)
+                .status(ItemStatus.AVAILABLE)
+                .build();
+
+        Item petrItem1 = Item.builder()
+                .title("Настольная игра 'Каркассон'")
+                .description("Полный комплект с двумя дополнениями. Отличная игра на вечер.")
+                .owner(petr)
+                .status(ItemStatus.AVAILABLE)
+                .build();
+
+        Item petrItem2 = Item.builder()
+                .title("Палатка 2-х местная")
+                .description("Легкая палатка для походов выходного дня. Вес 2.5 кг.")
+                .owner(petr)
+                .status(ItemStatus.AVAILABLE)
+                .build();
+
+        itemRepository.saveAll(List.of(mariaItem1, mariaItem2, petrItem1, petrItem2));
+
+        log.info("✅ Тестовые данные успешно загружены! Пароль для входа: 12345");
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/config/SecurityConfig.java">
+package com.endacheva.smart_shelf.config;
+
+import com.endacheva.smart_shelf.security.AuthEntryPointJwt;
+import com.endacheva.smart_shelf.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtFilter;
+    private final AuthEntryPointJwt unauthorizedHandler;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/items/**").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(unauthorizedHandler));
+
+        return http.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://localhost:3000",
+                "http://localhost",
+                "http://127.0.0.1"
+        ));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        return source;
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/controller/AuthController.java">
+package com.endacheva.smart_shelf.controller;
+
+import com.endacheva.smart_shelf.dto.AuthRequest;
+import com.endacheva.smart_shelf.dto.AuthResponse;
+import com.endacheva.smart_shelf.service.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final AuthService authService;
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody AuthRequest request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        return ResponseEntity.ok(authService.login(request));
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/controller/BorrowController.java">
+package com.endacheva.smart_shelf.controller;
+
+import com.endacheva.smart_shelf.dto.record.BorrowRequestCreate;
+import com.endacheva.smart_shelf.dto.record.BorrowRequestResponse;
+import com.endacheva.smart_shelf.model.enums.RequestStatus;
+import com.endacheva.smart_shelf.model.User;
+import com.endacheva.smart_shelf.service.BorrowService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/requests")
+@RequiredArgsConstructor
+public class BorrowController {
+
+    private final BorrowService borrowService;
+
+    @PostMapping
+    public ResponseEntity<BorrowRequestResponse> createRequest(@Valid @RequestBody BorrowRequestCreate request,
+                                                               @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(borrowService.createRequest(request.itemId(), currentUser));
+    }
+
+    @GetMapping("/my-requests")
+    public ResponseEntity<List<BorrowRequestResponse>> getMyRequests(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(borrowService.getMyRequests(currentUser));
+    }
+
+    @GetMapping("/incoming")
+    public ResponseEntity<List<BorrowRequestResponse>> getIncomingRequests(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(borrowService.getIncomingRequests(currentUser));
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<BorrowRequestResponse> updateStatus(@PathVariable UUID id,
+                                                              @RequestParam RequestStatus status,
+                                                              @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(borrowService.changeRequestStatus(id, status, currentUser));
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/controller/ItemController.java">
+package com.endacheva.smart_shelf.controller;
+
+import com.endacheva.smart_shelf.dto.record.ItemRequest;
+import com.endacheva.smart_shelf.dto.record.ItemResponse;
+import com.endacheva.smart_shelf.model.User;
+import com.endacheva.smart_shelf.service.ItemService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/items")
+@RequiredArgsConstructor
+public class ItemController {
+
+    private final ItemService itemService;
+
+    @GetMapping
+    public ResponseEntity<List<ItemResponse>> getAvailableItems(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(itemService.getAvailableItems(currentUser));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<ItemResponse>> getMyItems(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(itemService.getMyItems(currentUser));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemResponse> getItemById(@PathVariable UUID id) {
+        return ResponseEntity.ok(itemService.getItemById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<ItemResponse> createItem(@Valid  @RequestBody ItemRequest request,
+                                                   @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(itemService.createItem(request, currentUser));
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/record/BorrowRequestCreate.java">
+package com.endacheva.smart_shelf.dto.record;
+
+import java.util.UUID;
+
+public record BorrowRequestCreate(UUID itemId) {}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/record/BorrowRequestResponse.java">
+package com.endacheva.smart_shelf.dto.record;
+
+import java.util.UUID;
+
+public record BorrowRequestResponse(UUID id, String itemTitle, String requesterUsername, String status) {}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/record/ItemRequest.java">
+package com.endacheva.smart_shelf.dto.record;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record ItemRequest(
+        @NotBlank(message = "Название вещи не может быть пустым")
+        String title,
+
+        String description
+) {}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/record/ItemResponse.java">
+package com.endacheva.smart_shelf.dto.record;
+
+import java.util.UUID;
+
+public record ItemResponse(UUID id, String title, String description, String ownerUsername, String status) {}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/AuthRequest.java">
+package com.endacheva.smart_shelf.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record AuthRequest(
+        @NotBlank(message = "Имя пользователя обязательно")
+        String username,
+
+        @NotBlank(message = "Пароль обязателен")
+        @Size(min = 4, message = "Пароль должен быть не менее 4 символов")
+        String password
+){}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/AuthResponse.java">
+package com.endacheva.smart_shelf.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthResponse {
+    private String token;
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/dto/ErrorResponse.java">
+package com.endacheva.smart_shelf.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+public class ErrorResponse {
+    private int status;
+    private String message;
+    private LocalDateTime timestamp;
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/exception/GlobalExceptionHandler.java">
+package com.endacheva.smart_shelf.exception;
+
+import com.endacheva.smart_shelf.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessExceptions(RuntimeException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Неверный логин или пароль",
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                errors,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/model/enums/ItemStatus.java">
+package com.endacheva.smart_shelf.model.enums;
+
+public enum ItemStatus {
+    AVAILABLE,
+    IN_USE
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/model/enums/RequestStatus.java">
+package com.endacheva.smart_shelf.model.enums;
+
+public enum RequestStatus {
+    PENDING,
+    APPROVED,
+    REJECTED,
+    RETURNED
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/model/BorrowRequest.java">
+package com.endacheva.smart_shelf.model;
+
+import com.endacheva.smart_shelf.model.enums.RequestStatus;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "borrow_requests")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class BorrowRequest {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requester_id", nullable = false)
+    private User requester;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RequestStatus status;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/model/Item.java">
+package com.endacheva.smart_shelf.model;
+
+import com.endacheva.smart_shelf.model.enums.ItemStatus;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.UUID;
+
+@Entity
+@Table(name = "items")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ItemStatus status;
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/model/User.java">
+package com.endacheva.smart_shelf.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return true; }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/repository/BorrowRequestRepository.java">
+package com.endacheva.smart_shelf.repository;
+
+import com.endacheva.smart_shelf.model.BorrowRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.UUID;
+
+public interface BorrowRequestRepository extends JpaRepository<BorrowRequest, UUID> {
+    List<BorrowRequest> findAllByRequesterId(UUID requesterId);
+    List<BorrowRequest> findAllByItemOwnerId(UUID ownerId);
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/repository/ItemRepository.java">
+package com.endacheva.smart_shelf.repository;
+
+import com.endacheva.smart_shelf.model.Item;
+import com.endacheva.smart_shelf.model.enums.ItemStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.UUID;
+
+public interface ItemRepository extends JpaRepository<Item, UUID> {
+    List<Item> findAllByStatus(ItemStatus status);
+    List<Item> findAllByOwnerId(UUID ownerId);
+    List<Item> findByStatusAndOwnerIdNot(ItemStatus status, UUID ownerId);
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/repository/UserRepository.java">
+package com.endacheva.smart_shelf.repository;
+
+import com.endacheva.smart_shelf.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findByUsername(String username);
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/security/AuthEntryPointJwt.java">
+package com.endacheva.smart_shelf.security;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
+@Component
+public class AuthEntryPointJwt implements AuthenticationEntryPoint {
+
+    @Override
+    public void commence(@NonNull HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+            throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/security/JwtAuthenticationFilter.java">
+package com.endacheva.smart_shelf.security;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@Component
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String username;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        jwt = authHeader.substring(7);
+        username = jwtUtil.extractUsername(jwt);
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+            if (jwtUtil.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/security/JwtUtil.java">
+package com.endacheva.smart_shelf.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.function.Function;
+
+@Component
+public class JwtUtil {
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpirationInMs;
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claimsResolver.apply(claims);
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/service/AuthService.java">
+package com.endacheva.smart_shelf.service;
+
+import com.endacheva.smart_shelf.dto.AuthRequest;
+import com.endacheva.smart_shelf.dto.AuthResponse;
+import com.endacheva.smart_shelf.model.User;
+import com.endacheva.smart_shelf.repository.UserRepository;
+import com.endacheva.smart_shelf.security.JwtUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthResponse register(AuthRequest request) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            throw new RuntimeException("Такой пользователь уже существует");
+        }
+
+        var user = User.builder()
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
+                .build();
+
+        userRepository.save(user);
+        var jwtToken = jwtUtil.generateToken(user);
+        return new AuthResponse(jwtToken);
+    }
+
+    public AuthResponse login(AuthRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.username(), request.password())
+        );
+        var user = userRepository.findByUsername(request.username())
+                .orElseThrow();
+        var jwtToken = jwtUtil.generateToken(user);
+        return new AuthResponse(jwtToken);
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/service/BorrowService.java">
+package com.endacheva.smart_shelf.service;
+
+import com.endacheva.smart_shelf.dto.record.BorrowRequestResponse;
+import com.endacheva.smart_shelf.model.*;
+import com.endacheva.smart_shelf.model.enums.ItemStatus;
+import com.endacheva.smart_shelf.model.enums.RequestStatus;
+import com.endacheva.smart_shelf.repository.BorrowRequestRepository;
+import com.endacheva.smart_shelf.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class BorrowService {
+
+    private final BorrowRequestRepository requestRepository;
+    private final ItemRepository itemRepository;
+
+    @Transactional
+    public BorrowRequestResponse createRequest(UUID itemId, User requester) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Вещь не найдена"));
+
+        if (item.getStatus() != ItemStatus.AVAILABLE) {
+            throw new RuntimeException("Вещь уже занята");
+        }
+        if (item.getOwner().getId().equals(requester.getId())) {
+            throw new RuntimeException("Нельзя взять вещь у самого себя");
+        }
+
+        BorrowRequest request = BorrowRequest.builder()
+                .item(item)
+                .requester(requester)
+                .status(RequestStatus.PENDING)
+                .build();
+
+        return mapToResponse(requestRepository.save(request));
+    }
+
+    @Transactional
+    public BorrowRequestResponse changeRequestStatus(UUID requestId, RequestStatus newStatus, User currentUser) {
+        BorrowRequest request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Заявка не найдена"));
+
+        Item item = request.getItem();
+
+        if (!item.getOwner().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("У вас нет прав на изменение этой заявки");
+        }
+
+        if (newStatus == RequestStatus.APPROVED && request.getStatus() == RequestStatus.PENDING) {
+            item.setStatus(ItemStatus.IN_USE);
+        } else if (newStatus == RequestStatus.RETURNED && request.getStatus() == RequestStatus.APPROVED) {
+            item.setStatus(ItemStatus.AVAILABLE);
+        } else if (newStatus == RequestStatus.REJECTED && request.getStatus() == RequestStatus.PENDING) {
+            // Available
+        } else {
+            throw new RuntimeException("Недопустимый переход статуса");
+        }
+
+        request.setStatus(newStatus);
+        itemRepository.save(item);
+
+        return mapToResponse(requestRepository.save(request));
+    }
+
+    @Transactional(readOnly = true)
+    public List<BorrowRequestResponse> getMyRequests(User currentUser) {
+        return requestRepository.findAllByRequesterId(currentUser.getId())
+                .stream().map(this::mapToResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<BorrowRequestResponse> getIncomingRequests(User currentUser) {
+        return requestRepository.findAllByItemOwnerId(currentUser.getId())
+                .stream().map(this::mapToResponse).toList();
+    }
+
+    private BorrowRequestResponse mapToResponse(BorrowRequest request) {
+        return new BorrowRequestResponse(
+                request.getId(),
+                request.getItem().getTitle(),
+                request.getRequester().getUsername(),
+                request.getStatus().name()
+        );
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/service/ItemService.java">
+package com.endacheva.smart_shelf.service;
+
+import com.endacheva.smart_shelf.dto.record.ItemRequest;
+import com.endacheva.smart_shelf.dto.record.ItemResponse;
+import com.endacheva.smart_shelf.model.Item;
+import com.endacheva.smart_shelf.model.enums.ItemStatus;
+import com.endacheva.smart_shelf.model.User;
+import com.endacheva.smart_shelf.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class ItemService {
+
+    private final ItemRepository itemRepository;
+
+    @Transactional(readOnly = true)
+    public List<ItemResponse> getAvailableItems(User currentUser) {
+        return itemRepository.findByStatusAndOwnerIdNot(ItemStatus.AVAILABLE, currentUser.getId())
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponse> getMyItems(User currentUser) {
+        return itemRepository.findAllByOwnerId(currentUser.getId())
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ItemResponse getItemById(UUID id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Вещь не найдена"));
+        return mapToResponse(item);
+    }
+
+    @Transactional
+    public ItemResponse createItem(ItemRequest request, User currentUser) {
+        Item item = Item.builder()
+                .title(request.title())
+                .description(request.description())
+                .owner(currentUser)
+                .status(ItemStatus.AVAILABLE)
+                .build();
+
+        return mapToResponse(itemRepository.save(item));
+    }
+
+    private ItemResponse mapToResponse(Item item) {
+        return new ItemResponse(
+                item.getId(),
+                item.getTitle(),
+                item.getDescription(),
+                item.getOwner().getUsername(),
+                item.getStatus().name()
+        );
+    }
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/java/com/endacheva/smart_shelf/SmartShelfApplication.java">
+package com.endacheva.smart_shelf;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SmartShelfApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(SmartShelfApplication.class, args);
+	}
+}
+</file>
+
+<file path="smart-shelf-backend/src/main/resources/application.yaml">
+spring:
+  application:
+    name: smart-shelf
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/smartshelf_db
+    username: admin
+    password: rootpassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Настройки для JWT
+jwt:
+  secret: 9a4f2c8d3b7a1e6f45c8a0b3f267d8b1d4e6f3c8a9d2b5f8e3a9c8b5f6v8a3d9
+  expiration: 86400000
+</file>
+
+<file path="smart-shelf-backend/src/test/java/com/endacheva/smart_shelf/SmartShelfApplicationTests.java">
+package com.endacheva.smart_shelf;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SmartShelfApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+</file>
+
+<file path="smart-shelf-backend/.gitattributes">
+/mvnw text eol=lf
+*.cmd text eol=crlf
+</file>
+
+<file path="smart-shelf-backend/.gitignore">
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+</file>
+
+<file path="smart-shelf-backend/Dockerfile">
+# Этап 1: Сборка проекта
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Этап 2: Запуск приложения
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+</file>
+
+<file path="smart-shelf-backend/mvnw">
+#!/bin/sh
+# ----------------------------------------------------------------------------
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# Apache Maven Wrapper startup batch script, version 3.3.4
+#
+# Optional ENV vars
+# -----------------
+#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
+#   MVNW_REPOURL - repo url base for downloading maven distribution
+#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
+# ----------------------------------------------------------------------------
+
+set -euf
+[ "${MVNW_VERBOSE-}" != debug ] || set -x
+
+# OS specific support.
+native_path() { printf %s\\n "$1"; }
+case "$(uname)" in
+CYGWIN* | MINGW*)
+  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
+  native_path() { cygpath --path --windows "$1"; }
+  ;;
+esac
+
+# set JAVACMD and JAVACCMD
+set_java_home() {
+  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
+  if [ -n "${JAVA_HOME-}" ]; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+      JAVACCMD="$JAVA_HOME/jre/sh/javac"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+      JAVACCMD="$JAVA_HOME/bin/javac"
+
+      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
+        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
+        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
+        return 1
+      fi
+    fi
+  else
+    JAVACMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v java
+    )" || :
+    JAVACCMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v javac
+    )" || :
+
+    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
+      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
+      return 1
+    fi
+  fi
+}
+
+# hash string like Java String::hashCode
+hash_string() {
+  str="${1:-}" h=0
+  while [ -n "$str" ]; do
+    char="${str%"${str#?}"}"
+    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
+    str="${str#?}"
+  done
+  printf %x\\n $h
+}
+
+verbose() { :; }
+[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
+
+die() {
+  printf %s\\n "$1" >&2
+  exit 1
+}
+
+trim() {
+  # MWRAPPER-139:
+  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
+  #   Needed for removing poorly interpreted newline sequences when running in more
+  #   exotic environments such as mingw bash on Windows.
+  printf "%s" "${1}" | tr -d '[:space:]'
+}
+
+scriptDir="$(dirname "$0")"
+scriptName="$(basename "$0")"
+
+# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
+while IFS="=" read -r key value; do
+  case "${key-}" in
+  distributionUrl) distributionUrl=$(trim "${value-}") ;;
+  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
+  esac
+done <"$scriptDir/.mvn/wrapper/maven-wrapper.properties"
+[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+
+case "${distributionUrl##*/}" in
+maven-mvnd-*bin.*)
+  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
+  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
+  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
+  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
+  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
+  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
+  *)
+    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
+    distributionPlatform=linux-amd64
+    ;;
+  esac
+  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
+  ;;
+maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
+*) MVN_CMD="mvn${scriptName#mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
+esac
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
+distributionUrlName="${distributionUrl##*/}"
+distributionUrlNameMain="${distributionUrlName%.*}"
+distributionUrlNameMain="${distributionUrlNameMain%-bin}"
+MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
+MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
+
+exec_maven() {
+  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
+  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
+}
+
+if [ -d "$MAVEN_HOME" ]; then
+  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  exec_maven "$@"
+fi
+
+case "${distributionUrl-}" in
+*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
+*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
+esac
+
+# prepare tmp dir
+if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
+  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
+  trap clean HUP INT TERM EXIT
+else
+  die "cannot create temp dir"
+fi
+
+mkdir -p -- "${MAVEN_HOME%/*}"
+
+# Download and Install Apache Maven
+verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+verbose "Downloading from: $distributionUrl"
+verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+# select .zip or .tar.gz
+if ! command -v unzip >/dev/null; then
+  distributionUrl="${distributionUrl%.zip}.tar.gz"
+  distributionUrlName="${distributionUrl##*/}"
+fi
+
+# verbose opt
+__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
+[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
+
+# normalize http auth
+case "${MVNW_PASSWORD:+has-password}" in
+'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+esac
+
+if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
+  verbose "Found wget ... using wget"
+  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
+elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
+  verbose "Found curl ... using curl"
+  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
+elif set_java_home; then
+  verbose "Falling back to use Java to download"
+  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
+  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
+  cat >"$javaSource" <<-END
+	public class Downloader extends java.net.Authenticator
+	{
+	  protected java.net.PasswordAuthentication getPasswordAuthentication()
+	  {
+	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
+	  }
+	  public static void main( String[] args ) throws Exception
+	  {
+	    setDefault( new Downloader() );
+	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
+	  }
+	}
+	END
+  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
+  verbose " - Compiling Downloader.java ..."
+  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
+  verbose " - Running Downloader.java ..."
+  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
+fi
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+if [ -n "${distributionSha256Sum-}" ]; then
+  distributionSha256Result=false
+  if [ "$MVN_CMD" = mvnd.sh ]; then
+    echo "Checksum validation is not supported for maven-mvnd." >&2
+    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  elif command -v sha256sum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c - >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  elif command -v shasum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  else
+    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
+    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  fi
+  if [ $distributionSha256Result = false ]; then
+    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
+    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
+    exit 1
+  fi
+fi
+
+# unzip and move
+if command -v unzip >/dev/null; then
+  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
+else
+  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
+fi
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+actualDistributionDir=""
+
+# First try the expected directory name (for regular distributions)
+if [ -d "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" ]; then
+  if [ -f "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/bin/$MVN_CMD" ]; then
+    actualDistributionDir="$distributionUrlNameMain"
+  fi
+fi
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if [ -z "$actualDistributionDir" ]; then
+  # enable globbing to iterate over items
+  set +f
+  for dir in "$TMP_DOWNLOAD_DIR"/*; do
+    if [ -d "$dir" ]; then
+      if [ -f "$dir/bin/$MVN_CMD" ]; then
+        actualDistributionDir="$(basename "$dir")"
+        break
+      fi
+    fi
+  done
+  set -f
+fi
+
+if [ -z "$actualDistributionDir" ]; then
+  verbose "Contents of $TMP_DOWNLOAD_DIR:"
+  verbose "$(ls -la "$TMP_DOWNLOAD_DIR")"
+  die "Could not find Maven distribution directory in extracted archive"
+fi
+
+verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$actualDistributionDir/mvnw.url"
+mv -- "$TMP_DOWNLOAD_DIR/$actualDistributionDir" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
+
+clean || :
+exec_maven "$@"
+</file>
+
+<file path="smart-shelf-backend/mvnw.cmd">
+<# : batch portion
+@REM ----------------------------------------------------------------------------
+@REM Licensed to the Apache Software Foundation (ASF) under one
+@REM or more contributor license agreements.  See the NOTICE file
+@REM distributed with this work for additional information
+@REM regarding copyright ownership.  The ASF licenses this file
+@REM to you under the Apache License, Version 2.0 (the
+@REM "License"); you may not use this file except in compliance
+@REM with the License.  You may obtain a copy of the License at
+@REM
+@REM    http://www.apache.org/licenses/LICENSE-2.0
+@REM
+@REM Unless required by applicable law or agreed to in writing,
+@REM software distributed under the License is distributed on an
+@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+@REM KIND, either express or implied.  See the License for the
+@REM specific language governing permissions and limitations
+@REM under the License.
+@REM ----------------------------------------------------------------------------
+
+@REM ----------------------------------------------------------------------------
+@REM Apache Maven Wrapper startup batch script, version 3.3.4
+@REM
+@REM Optional ENV vars
+@REM   MVNW_REPOURL - repo url base for downloading maven distribution
+@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
+@REM ----------------------------------------------------------------------------
+
+@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
+@SET __MVNW_CMD__=
+@SET __MVNW_ERROR__=
+@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
+@SET PSModulePath=
+@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
+  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
+)
+@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
+@SET __MVNW_PSMODULEP_SAVE=
+@SET __MVNW_ARG0_NAME__=
+@SET MVNW_USERNAME=
+@SET MVNW_PASSWORD=
+@IF NOT "%__MVNW_CMD__%"=="" ("%__MVNW_CMD__%" %*)
+@echo Cannot start maven from wrapper >&2 && exit /b 1
+@GOTO :EOF
+: end batch / begin powershell #>
+
+$ErrorActionPreference = "Stop"
+if ($env:MVNW_VERBOSE -eq "true") {
+  $VerbosePreference = "Continue"
+}
+
+# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
+$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
+if (!$distributionUrl) {
+  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+}
+
+switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
+  "maven-mvnd-*" {
+    $USE_MVND = $true
+    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
+    $MVN_CMD = "mvnd.cmd"
+    break
+  }
+  default {
+    $USE_MVND = $false
+    $MVN_CMD = $script -replace '^mvnw','mvn'
+    break
+  }
+}
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+if ($env:MVNW_REPOURL) {
+  $MVNW_REPO_PATTERN = if ($USE_MVND -eq $False) { "/org/apache/maven/" } else { "/maven/mvnd/" }
+  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace "^.*$MVNW_REPO_PATTERN",'')"
+}
+$distributionUrlName = $distributionUrl -replace '^.*/',''
+$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
+
+$MAVEN_M2_PATH = "$HOME/.m2"
+if ($env:MAVEN_USER_HOME) {
+  $MAVEN_M2_PATH = "$env:MAVEN_USER_HOME"
+}
+
+if (-not (Test-Path -Path $MAVEN_M2_PATH)) {
+    New-Item -Path $MAVEN_M2_PATH -ItemType Directory | Out-Null
+}
+
+$MAVEN_WRAPPER_DISTS = $null
+if ((Get-Item $MAVEN_M2_PATH).Target[0] -eq $null) {
+  $MAVEN_WRAPPER_DISTS = "$MAVEN_M2_PATH/wrapper/dists"
+} else {
+  $MAVEN_WRAPPER_DISTS = (Get-Item $MAVEN_M2_PATH).Target[0] + "/wrapper/dists"
+}
+
+$MAVEN_HOME_PARENT = "$MAVEN_WRAPPER_DISTS/$distributionUrlNameMain"
+$MAVEN_HOME_NAME = ([System.Security.Cryptography.SHA256]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
+$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
+
+if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
+  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+  exit $?
+}
+
+if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
+  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
+}
+
+# prepare tmp dir
+$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
+$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
+$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
+trap {
+  if ($TMP_DOWNLOAD_DIR.Exists) {
+    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+  }
+}
+
+New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
+
+# Download and Install Apache Maven
+Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+Write-Verbose "Downloading from: $distributionUrl"
+Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+$webclient = New-Object System.Net.WebClient
+if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
+  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
+}
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
+if ($distributionSha256Sum) {
+  if ($USE_MVND) {
+    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
+  }
+  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
+  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
+    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
+  }
+}
+
+# unzip and move
+Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+$actualDistributionDir = ""
+
+# First try the expected directory name (for regular distributions)
+$expectedPath = Join-Path "$TMP_DOWNLOAD_DIR" "$distributionUrlNameMain"
+$expectedMvnPath = Join-Path "$expectedPath" "bin/$MVN_CMD"
+if ((Test-Path -Path $expectedPath -PathType Container) -and (Test-Path -Path $expectedMvnPath -PathType Leaf)) {
+  $actualDistributionDir = $distributionUrlNameMain
+}
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if (!$actualDistributionDir) {
+  Get-ChildItem -Path "$TMP_DOWNLOAD_DIR" -Directory | ForEach-Object {
+    $testPath = Join-Path $_.FullName "bin/$MVN_CMD"
+    if (Test-Path -Path $testPath -PathType Leaf) {
+      $actualDistributionDir = $_.Name
+    }
+  }
+}
+
+if (!$actualDistributionDir) {
+  Write-Error "Could not find Maven distribution directory in extracted archive"
+}
+
+Write-Verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+Rename-Item -Path "$TMP_DOWNLOAD_DIR/$actualDistributionDir" -NewName $MAVEN_HOME_NAME | Out-Null
+try {
+  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
+} catch {
+  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
+    Write-Error "fail to move MAVEN_HOME"
+  }
+} finally {
+  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+}
+
+Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+</file>
+
+<file path="smart-shelf-backend/pom.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.endacheva</groupId>
+	<artifactId>smart-shelf</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name/>
+	<description/>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId> <version>0.12.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+</file>
+
+<file path="smart-shelf-ui/.vscode/extensions.json">
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
+  "recommendations": ["angular.ng-template"]
+}
+</file>
+
+<file path="smart-shelf-ui/.vscode/launch.json">
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ng serve",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start",
+      "url": "http://localhost:4200/"
+    },
+    {
+      "name": "ng test",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: test",
+      "url": "http://localhost:9876/debug.html"
+    }
+  ]
+}
+</file>
+
+<file path="smart-shelf-ui/.vscode/tasks.json">
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "Changes detected"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "Changes detected"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
+    }
+  ]
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/guards/auth.guard.ts">
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+
+  router.navigate(['/login']);
+  return false;
+};
+</file>
+
+<file path="smart-shelf-ui/src/app/core/guards/guest.guard.ts">
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+
+export const guestGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAuthenticated()) {
+    router.navigate(['/catalog']);
+    return false;
+  }
+
+  return true;
+};
+</file>
+
+<file path="smart-shelf-ui/src/app/core/interceptors/jwt.interceptor.ts">
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+
+  if (token && !req.url.includes('/auth/')) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  return next(req);
+};
+</file>
+
+<file path="smart-shelf-ui/src/app/core/models/auth.model.ts">
+export interface AuthRequest {
+  username?: string;
+  password?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/models/borrow.model.ts">
+export interface BorrowRequestCreate {
+  itemId: string;
+}
+
+export interface BorrowRequestResponse {
+  id: string;
+  itemTitle: string;
+  requesterUsername: string;
+  status: string; // 'PENDING' | 'APPROVED' | 'REJECTED' | 'RETURNED'
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/models/item.model.ts">
+export interface ItemResponse {
+  id: string;
+  title: string;
+  description: string;
+  ownerUsername: string;
+  status: string; // 'AVAILABLE' | 'IN_USE'
+}
+
+export interface ItemRequest {
+  title: string;
+  description: string;
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/services/auth.service.ts">
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { AuthRequest, AuthResponse } from '../models/auth.model';
+import { BehaviorSubject, tap } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
+  private apiUrl = `${environment.apiUrl}/auth`;
+
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
+  login(credentials: AuthRequest) {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => this.saveToken(response.token))
+    );
+  }
+
+  register(credentials: AuthRequest) {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, credentials).pipe(
+      tap(response => this.saveToken(response.token))
+    );
+  }
+
+  logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('jwt_token');
+    }
+    this.isAuthenticatedSubject.next(false);
+  }
+
+  getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('jwt_token');
+    }
+    return null;
+  }
+
+  isAuthenticated(): boolean {
+    return this.hasToken();
+  }
+
+  private hasToken(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage.getItem('jwt_token');
+    }
+    return false;
+  }
+
+  private saveToken(token: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('jwt_token', token);
+    }
+    this.isAuthenticatedSubject.next(true);
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/services/borrow.service.ts">
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { BorrowRequestCreate, BorrowRequestResponse } from '../models/borrow.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BorrowService {
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/requests`;
+
+  private pendingCountSubject = new BehaviorSubject<number>(0);
+  public pendingCount$ = this.pendingCountSubject.asObservable();
+
+  updatePendingCount() {
+    this.getIncomingRequests().subscribe({
+      next: (requests) => {
+        const count = requests.filter(r => r.status === 'PENDING').length;
+        this.pendingCountSubject.next(count);
+      }
+    });
+  }
+
+  createRequest(request: BorrowRequestCreate): Observable<BorrowRequestResponse> {
+    return this.http.post<BorrowRequestResponse>(this.apiUrl, request);
+  }
+
+  getMyRequests(): Observable<BorrowRequestResponse[]> {
+    return this.http.get<BorrowRequestResponse[]>(`${this.apiUrl}/my-requests`);
+  }
+
+  getIncomingRequests(): Observable<BorrowRequestResponse[]> {
+    return this.http.get<BorrowRequestResponse[]>(`${this.apiUrl}/incoming`);
+  }
+
+  updateStatus(id: string, status: string): Observable<BorrowRequestResponse> {
+    return this.http.put<BorrowRequestResponse>(`${this.apiUrl}/${id}/status?status=${status}`, {});
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/services/item.service.ts">
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { ItemRequest, ItemResponse } from '../models/item.model';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ItemService {
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/items`;
+
+  getAvailableItems(): Observable<ItemResponse[]> {
+    return this.http.get<ItemResponse[]>(this.apiUrl);
+  }
+
+  getMyItems(): Observable<ItemResponse[]> {
+    return this.http.get<ItemResponse[]>(`${this.apiUrl}/my`);
+  }
+
+  createItem(item: ItemRequest): Observable<ItemResponse> {
+    return this.http.post<ItemResponse>(this.apiUrl, item);
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/core/services/toast.service.ts">
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+export interface Toast {
+  id: number;
+  message: string;
+  type: 'success' | 'error';
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ToastService {
+  private toastsSubject = new BehaviorSubject<Toast[]>([]);
+  public toasts$ = this.toastsSubject.asObservable();
+  private counter = 0;
+
+  showSuccess(message: string) {
+    this.addToast(message, 'success');
+  }
+
+  showError(message: string) {
+    this.addToast(message, 'error');
+  }
+
+  private addToast(message: string, type: 'success' | 'error') {
+    const id = this.counter++;
+    const currentToasts = this.toastsSubject.value;
+    this.toastsSubject.next([...currentToasts, { id, message, type }]);
+
+    setTimeout(() => this.removeToast(id), 3000);
+  }
+
+  removeToast(id: number) {
+    this.toastsSubject.next(this.toastsSubject.value.filter(t => t.id !== id));
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/features/auth/auth.component.html">
+<div class="min-h-screen flex items-center justify-center px-4">
+
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
+        {{ isLoginMode ? 'Вход в SmartShelf' : 'Создать аккаунт' }}
+      </h2>
+      <p class="text-sm text-gray-500 mt-2">
+        Платформа для обмена ресурсами
+      </p>
+    </div>
+
+    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Имя пользователя</label>
+        <input
+          type="text"
+          formControlName="username"
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+          placeholder="Например, user"
+        >
+        <div *ngIf="f['username'].invalid && f['username'].touched" class="text-red-500 text-xs mt-1">
+          Логин обязателен (минимум 3 символа)
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+          placeholder="••••••••"
+        >
+        <div *ngIf="f['password'].invalid && f['password'].touched" class="text-red-500 text-xs mt-1">
+          Пароль обязателен (минимум 4 символа)
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="authForm.invalid || isLoading"
+        class="w-full py-2.5 px-4 bg-primary hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+      >
+        <span *ngIf="!isLoading">{{ isLoginMode ? 'Войти' : 'Зарегистрироваться' }}</span>
+        <svg *ngIf="isLoading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </button>
+
+    </form>
+
+    <div class="mt-6 text-center text-sm">
+      <span class="text-gray-500">
+        {{ isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?' }}
+      </span>
+      <button
+        type="button"
+        (click)="toggleMode()"
+        class="ml-1 text-primary hover:text-blue-700 font-medium hover:underline focus:outline-none"
+      >
+        {{ isLoginMode ? 'Зарегистрироваться' : 'Войти' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/features/auth/auth.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/features/auth/auth.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AuthComponent } from './auth.component';
+
+describe('AuthComponent', () => {
+  let component: AuthComponent;
+  let fixture: ComponentFixture<AuthComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AuthComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(AuthComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/features/auth/auth.component.ts">
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+
+@Component({
+  selector: 'app-auth',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.scss']
+})
+export class AuthComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  isLoginMode = true;
+  isLoading = false;
+  errorMessage = '';
+
+  authForm: FormGroup = this.fb.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(4)]]
+  });
+
+  toggleMode() {
+    this.isLoginMode = !this.isLoginMode;
+    this.errorMessage = '';
+    this.authForm.reset();
+  }
+
+  onSubmit() {
+    if (this.authForm.invalid) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const credentials = this.authForm.value;
+    const auth$ = this.isLoginMode
+      ? this.authService.login(credentials)
+      : this.authService.register(credentials);
+
+    auth$.subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/catalog']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Произошла ошибка. Проверьте данные.';
+      }
+    });
+  }
+
+  get f() { return this.authForm.controls; }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/features/catalog/catalog.component.html">
+<div class="space-y-6">
+
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Доступные ресурсы</h1>
+      <p class="mt-1 text-sm text-gray-500">Возьмите во временное пользование вещи коллег.</p>
+    </div>
+
+    <div class="relative max-w-md w-full sm:w-80">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary/50 focus:border-primary sm:text-sm transition-all shadow-sm"
+        placeholder="Поиск по названию или описанию..."
+      >
+      <button *ngIf="searchQuery" (click)="searchQuery = ''" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="items.length === 0" class="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">Нет доступных вещей</h3>
+    <p class="mt-1 text-sm text-gray-500">Библиотека пока пуста. Зайдите позже или добавьте свои вещи!</p>
+  </div>
+
+  <div *ngIf="items.length > 0 && filteredItems.length === 0" class="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">Ничего не найдено</h3>
+    <p class="mt-1 text-sm text-gray-500">По запросу «{{ searchQuery }}» нет совпадений.</p>
+  </div>
+
+  <div *ngIf="filteredItems.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div *ngFor="let item of filteredItems" class="bg-white overflow-hidden shadow-sm border border-gray-200 rounded-xl hover:shadow-md transition-shadow flex flex-col">
+
+      <div class="p-5 flex-1">
+        <div class="flex items-center justify-between mb-3">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            Доступно
+          </span>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-900 truncate" [title]="item.title">{{ item.title }}</h3>
+        <p class="mt-2 text-sm text-gray-600 line-clamp-3" [title]="item.description || ''">{{ item.description || 'Описание отсутствует' }}</p>
+      </div>
+
+      <div class="px-5 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+            {{ item.ownerUsername.charAt(0).toUpperCase() }}
+          </div>
+          <span class="text-sm font-medium text-gray-700 truncate w-20" [title]="item.ownerUsername">
+            {{ item.ownerUsername }}
+          </span>
+        </div>
+
+        <button
+          (click)="requestItem(item.id)"
+          [disabled]="requestedItemIds.has(item.id)"
+          [ngClass]="requestedItemIds.has(item.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-blue-700'"
+          class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white focus:outline-none transition-colors">
+          {{ requestedItemIds.has(item.id) ? 'Заявка отправлена' : 'Запросить' }}
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/features/catalog/catalog.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/features/catalog/catalog.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { CatalogComponent } from './catalog.component';
+
+describe('CatalogComponent', () => {
+  let component: CatalogComponent;
+  let fixture: ComponentFixture<CatalogComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CatalogComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(CatalogComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/features/catalog/catalog.component.ts">
+import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // <-- 1. Добавили модуль для работы с формами (ngModel)
+import { ItemService } from '../../core/services/item.service';
+import { BorrowService } from '../../core/services/borrow.service';
+import { ItemResponse } from '../../core/models/item.model';
+import { ToastService } from '../../core/services/toast.service';
+
+@Component({
+  selector: 'app-catalog',
+  standalone: true,
+  imports: [CommonModule, FormsModule], // <-- 2. Подключили модуль сюда
+  templateUrl: './catalog.component.html'
+})
+export class CatalogComponent implements OnInit {
+  private itemService = inject(ItemService);
+  private borrowService = inject(BorrowService);
+  private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
+  private toastService = inject(ToastService);
+
+  items: ItemResponse[] = [];
+  searchQuery = ''; // <-- Переменная для хранения текста поиска
+  requestedItemIds = new Set<string>();
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadItems();
+    }
+  }
+
+  loadItems() {
+    this.itemService.getAvailableItems().subscribe({
+      next: (data) => {
+        this.items = data;
+        this.cdr.detectChanges();
+      },
+      error: () => this.toastService.showError('Не удалось загрузить каталог')
+    });
+  }
+
+  requestItem(itemId: string) {
+    this.borrowService.createRequest({ itemId }).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Заявка успешно отправлена владельцу!');
+        this.requestedItemIds.add(itemId);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.toastService.showError(err.error?.message || 'Ошибка при отправке заявки');
+      }
+    });
+  }
+
+  // <-- 3. Магия фильтрации! Этот метод автоматически пересчитывает массив при вводе текста
+  get filteredItems(): ItemResponse[] {
+    if (!this.searchQuery.trim()) {
+      return this.items; // Если поиск пуст - отдаем всё
+    }
+
+    const query = this.searchQuery.toLowerCase().trim();
+
+    return this.items.filter(item => {
+      const matchTitle = item.title.toLowerCase().includes(query);
+      // Проверяем описание (с защитой от null, если описания нет)
+      const matchDesc = item.description ? item.description.toLowerCase().includes(query) : false;
+
+      return matchTitle || matchDesc;
+    });
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/features/my-items/my-items.component.html">
+<div class="space-y-6">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Мой инвентарь</h1>
+      <p class="mt-1 text-sm text-gray-500">Вещи, которыми вы делитесь с комьюнити.</p>
+    </div>
+    <button (click)="openModal()" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-blue-700 transition-colors">
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      Добавить вещь
+    </button>
+  </div>
+
+  <div *ngIf="items.length === 0" class="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">У вас пока нет вещей</h3>
+    <p class="mt-1 text-sm text-gray-500">Добавьте свою первую вещь, чтобы коллеги могли ее взять.</p>
+  </div>
+
+  <div *ngIf="items.length > 0" class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+    <ul class="divide-y divide-gray-200">
+      <li *ngFor="let item of items" class="p-6 hover:bg-gray-50 transition-colors">
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h4 class="text-lg font-bold text-gray-900">{{ item.title }}</h4>
+            <p class="mt-1 text-sm text-gray-600">{{ item.description || 'Нет описания' }}</p>
+          </div>
+          <div class="ml-4 flex-shrink-0">
+            <span *ngIf="item.status === 'AVAILABLE'" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+              Доступна
+            </span>
+            <span *ngIf="item.status === 'IN_USE'" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+              На руках
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="showAddModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" (click)="closeModal()"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <h3 class="text-lg leading-6 font-bold text-gray-900 mb-4" id="modal-title">
+            Добавить новую вещь
+          </h3>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Название <span class="text-red-500">*</span></label>
+              <input type="text" formControlName="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Например: Книга Java Concurrency">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Описание</label>
+              <textarea formControlName="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Укажите состояние вещи или другие детали"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end space-x-3">
+          <button type="button" (click)="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none transition-colors">
+            Отмена
+          </button>
+          <button type="submit" [disabled]="itemForm.invalid" class="px-4 py-2 text-sm font-medium text-white bg-primary border border-transparent rounded-md hover:bg-blue-700 focus:outline-none transition-colors disabled:opacity-50">
+            Сохранить
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/features/my-items/my-items.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/features/my-items/my-items.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { MyItemsComponent } from './my-items.component';
+
+describe('MyItemsComponent', () => {
+  let component: MyItemsComponent;
+  let fixture: ComponentFixture<MyItemsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MyItemsComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(MyItemsComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/features/my-items/my-items.component.ts">
+import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ItemService } from '../../core/services/item.service';
+import { ItemResponse } from '../../core/models/item.model';
+
+@Component({
+  selector: 'app-my-items',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './my-items.component.html'
+})
+export class MyItemsComponent implements OnInit {
+  private itemService = inject(ItemService);
+  private fb = inject(FormBuilder);
+  private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
+
+  items: ItemResponse[] = [];
+  showAddModal = false;
+
+  itemForm: FormGroup = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(2)]],
+    description: ['']
+  });
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadMyItems();
+    }
+  }
+
+  loadMyItems() {
+    this.itemService.getMyItems().subscribe({
+      next: (data) => {
+        this.items = data;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  openModal() {
+    this.showAddModal = true;
+  }
+
+  closeModal() {
+    this.showAddModal = false;
+    this.itemForm.reset();
+  }
+
+  onSubmit() {
+    if (this.itemForm.invalid) return;
+
+    this.itemService.createItem(this.itemForm.value).subscribe({
+      next: (newItem) => {
+        this.items.unshift(newItem);
+        this.closeModal();
+        this.cdr.detectChanges();
+      }
+    });
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/features/not-found/not-found.component.html">
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+  <h1 class="text-9xl font-extrabold text-gray-200 tracking-widest">404</h1>
+  <div class="bg-primary px-2 text-sm rounded rotate-12 absolute text-white shadow-sm">
+    Страница не найдена
+  </div>
+  <p class="mt-8 text-gray-500 text-center max-w-md">
+    Кажется, вы заблудились. Вещь, которую вы ищете, либо выдана, либо никогда не существовала в нашей библиотеке.
+  </p>
+  <button routerLink="/catalog" class="mt-8 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+    Вернуться в каталог
+  </button>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/features/not-found/not-found.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/features/not-found/not-found.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { NotFoundComponent } from './not-found.component';
+
+describe('NotFoundComponent', () => {
+  let component: NotFoundComponent;
+  let fixture: ComponentFixture<NotFoundComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NotFoundComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(NotFoundComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/features/not-found/not-found.component.ts">
+import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-not-found.component',
+  imports: [RouterLink],
+  templateUrl: './not-found.component.html',
+  styleUrl: './not-found.component.scss',
+})
+export class NotFoundComponent {
+
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/features/requests/requests.component.html">
+<div class="space-y-6">
+
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Центр обмена</h1>
+    <p class="mt-1 text-sm text-gray-500">Управляйте заявками на ваши вещи и отслеживайте свои запросы.</p>
+  </div>
+
+  <div class="border-b border-gray-200">
+    <nav class="-mb-px flex space-x-8">
+      <button
+        (click)="setTab('incoming')"
+        [class.border-primary]="activeTab === 'incoming'"
+        [class.text-primary]="activeTab === 'incoming'"
+        [class.border-transparent]="activeTab !== 'incoming'"
+        [class.text-gray-500]="activeTab !== 'incoming'"
+        class="hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors relative">
+        Входящие заявки
+        <span *ngIf="incomingRequests.length > 0" class="ml-2 bg-gray-100 text-gray-900 py-0.5 px-2.5 rounded-full text-xs border border-gray-200">
+          {{ incomingRequests.length }}
+        </span>
+      </button>
+
+      <button
+        (click)="setTab('outgoing')"
+        [class.border-primary]="activeTab === 'outgoing'"
+        [class.text-primary]="activeTab === 'outgoing'"
+        [class.border-transparent]="activeTab !== 'outgoing'"
+        [class.text-gray-500]="activeTab !== 'outgoing'"
+        class="hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors relative">
+        Мои запросы
+        <span *ngIf="outgoingRequests.length > 0" class="ml-2 bg-gray-100 text-gray-900 py-0.5 px-2.5 rounded-full text-xs border border-gray-200">
+          {{ outgoingRequests.length }}
+        </span>
+      </button>
+    </nav>
+  </div>
+
+  <div *ngIf="activeTab === 'incoming'" class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+    <div *ngIf="incomingRequests.length === 0" class="p-8 text-center text-gray-500 text-sm">
+      Пока никто не просил ваши вещи.
+    </div>
+
+    <ul class="divide-y divide-gray-200">
+      <li *ngFor="let req of incomingRequests" class="p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Коллега <span class="font-bold text-gray-900">{{ req.requesterUsername }}</span> хочет взять:</p>
+            <h4 class="text-lg font-bold text-gray-900">{{ req.itemTitle }}</h4>
+          </div>
+
+          <div class="flex flex-col items-end gap-3">
+            <ng-container [ngSwitch]="req.status">
+              <span *ngSwitchCase="'PENDING'" class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">Ожидает решения</span>
+              <span *ngSwitchCase="'APPROVED'" class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">В использовании</span>
+              <span *ngSwitchCase="'REJECTED'" class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">Отклонено</span>
+              <span *ngSwitchCase="'RETURNED'" class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Возвращено</span>
+            </ng-container>
+
+            <div *ngIf="req.status === 'PENDING'" class="flex space-x-2">
+              <button (click)="changeStatus(req.id, 'APPROVED')" class="px-3 py-1.5 bg-primary text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors">Одобрить</button>
+              <button (click)="confirmReject(req.id)" class="px-3 py-1.5 bg-white border border-gray-300 text-gray-700 text-xs font-medium rounded hover:bg-gray-50 transition-colors">Отказать</button>
+            </div>
+
+            <div *ngIf="req.status === 'APPROVED'">
+              <button (click)="changeStatus(req.id, 'RETURNED')" class="px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors">Подтвердить возврат</button>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="activeTab === 'outgoing'" class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+    <div *ngIf="outgoingRequests.length === 0" class="p-8 text-center text-gray-500 text-sm">
+      Вы еще ничего не запрашивали из каталога.
+    </div>
+
+    <ul class="divide-y divide-gray-200">
+      <li *ngFor="let req of outgoingRequests" class="p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Вы запросили вещь:</p>
+            <h4 class="text-lg font-bold text-gray-900">{{ req.itemTitle }}</h4>
+          </div>
+
+          <div>
+            <ng-container [ngSwitch]="req.status">
+              <span *ngSwitchCase="'PENDING'" class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">Ждет подтверждения владельца</span>
+              <span *ngSwitchCase="'APPROVED'" class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">Владелец одобрил (Вещь у вас)</span>
+              <span *ngSwitchCase="'REJECTED'" class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">Владелец отказал</span>
+              <span *ngSwitchCase="'RETURNED'" class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Успешно возвращено</span>
+            </ng-container>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="showRejectConfirm" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" (click)="cancelReject()"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">Отклонить заявку?</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">Вы уверены, что хотите отказать коллеге? Это действие нельзя отменить.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse space-y-2 sm:space-y-0 sm:space-x-2 sm:space-x-reverse">
+          <button type="button" (click)="executeReject()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:w-auto sm:text-sm transition-colors">
+            Да, отклонить
+          </button>
+          <button type="button" (click)="cancelReject()" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:w-auto sm:text-sm transition-colors">
+            Отмена
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/features/requests/requests.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/features/requests/requests.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { RequestsComponent } from './requests.component';
+
+describe('RequestsComponent', () => {
+  let component: RequestsComponent;
+  let fixture: ComponentFixture<RequestsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RequestsComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(RequestsComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/features/requests/requests.component.ts">
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BorrowService } from '../../core/services/borrow.service';
+import { BorrowRequestResponse } from '../../core/models/borrow.model';
+import { ToastService } from '../../core/services/toast.service';
+
+@Component({
+  selector: 'app-requests',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './requests.component.html'
+})
+export class RequestsComponent implements OnInit {
+  private borrowService = inject(BorrowService);
+  private cdr = inject(ChangeDetectorRef);
+  private toastService = inject(ToastService);
+
+  showRejectConfirm = false;
+  requestToRejectId: string | null = null;
+
+  activeTab: 'incoming' | 'outgoing' = 'incoming';
+
+  incomingRequests: BorrowRequestResponse[] = [];
+  outgoingRequests: BorrowRequestResponse[] = [];
+
+  ngOnInit(): void {
+    this.loadRequests();
+  }
+
+  setTab(tab: 'incoming' | 'outgoing') {
+    this.activeTab = tab;
+  }
+
+  loadRequests() {
+    this.borrowService.getIncomingRequests().subscribe({
+      next: (data) => {
+        this.incomingRequests = data;
+        this.cdr.detectChanges();
+      }
+    });
+
+    this.borrowService.getMyRequests().subscribe({
+      next: (data) => {
+        this.outgoingRequests = data;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  changeStatus(id: string, newStatus: string) {
+    this.borrowService.updateStatus(id, newStatus).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Статус заявки успешно изменен!');
+        this.loadRequests();
+        this.borrowService.updatePendingCount();
+      },
+      error: () => this.toastService.showError('Произошла ошибка')
+    });
+  }
+
+  confirmReject(id: string) {
+    this.requestToRejectId = id;
+    this.showRejectConfirm = true;
+  }
+
+  cancelReject() {
+    this.showRejectConfirm = false;
+    this.requestToRejectId = null;
+  }
+
+  executeReject() {
+    if (this.requestToRejectId) {
+      this.changeStatus(this.requestToRejectId, 'REJECTED');
+      this.cancelReject();
+    }
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/layout/layout.component.html">
+<div class="min-h-screen flex flex-col bg-gray-50">
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center gap-2 text-primary font-bold text-xl tracking-tight cursor-pointer" routerLink="/catalog">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            SmartShelf
+          </div>
+
+          <nav class="hidden sm:ml-8 sm:flex sm:space-x-8">
+            <a routerLink="/catalog" routerLinkActive="border-primary text-gray-900" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+              Каталог
+            </a>
+            <a routerLink="/my-items" routerLinkActive="border-primary text-gray-900" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+              Мой инвентарь
+            </a>
+            <a routerLink="/requests" routerLinkActive="border-primary text-gray-900" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">
+              Центр обмена
+
+              <span *ngIf="(pendingCount$ | async)! > 0" class="ml-1.5 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center justify-center animate-pulse">
+                {{ pendingCount$ | async }}
+              </span>
+
+            </a>
+          </nav>
+        </div>
+
+        <div class="flex items-center">
+          <button (click)="logout()" class="text-gray-500 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2">
+            Выйти
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/layout/layout.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/layout/layout.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { LayoutComponent } from './layout.component';
+
+describe('LayoutComponent', () => {
+  let component: LayoutComponent;
+  let fixture: ComponentFixture<LayoutComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [LayoutComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(LayoutComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/layout/layout.component.ts">
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { BorrowService } from '../../../core/services/borrow.service';
+
+@Component({
+  selector: 'app-layout',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './layout.component.html'
+})
+export class LayoutComponent implements OnInit {
+  private authService = inject(AuthService);
+  private borrowService = inject(BorrowService);
+  private router = inject(Router);
+
+  pendingCount$ = this.borrowService.pendingCount$;
+
+  ngOnInit() {
+    this.borrowService.updatePendingCount();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/toast/toast.component.html">
+<div class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none">
+  <div *ngFor="let toast of toastService.toasts$ | async"
+       class="pointer-events-auto transform transition-all duration-300 ease-in-out flex items-center p-4 rounded-lg shadow-lg text-sm font-medium text-white max-w-sm w-full"
+       [ngClass]="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'">
+
+    <svg *ngIf="toast.type === 'success'" class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+
+    <svg *ngIf="toast.type === 'error'" class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+
+    <span class="flex-1">{{ toast.message }}</span>
+
+    <button (click)="toastService.removeToast(toast.id)" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+</div>
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/toast/toast.component.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/toast/toast.component.spec.ts">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ToastComponent } from './toast.component';
+
+describe('ToastComponent', () => {
+  let component: ToastComponent;
+  let fixture: ComponentFixture<ToastComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ToastComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(ToastComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/shared/components/toast/toast.component.ts">
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../core/services/toast.service';
+
+@Component({
+  selector: 'app-toast',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './toast.component.html'
+})
+export class ToastComponent {
+  toastService = inject(ToastService);
+}
+</file>
+
+<file path="smart-shelf-ui/src/app/app.config.server.ts">
+import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
+import { provideServerRendering, withRoutes } from '@angular/ssr';
+import { appConfig } from './app.config';
+import { serverRoutes } from './app.routes.server';
+
+const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering(withRoutes(serverRoutes))
+  ]
+};
+
+export const config = mergeApplicationConfig(appConfig, serverConfig);
+</file>
+
+<file path="smart-shelf-ui/src/app/app.config.ts">
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes),
+    provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor]))
+  ]
+};
+</file>
+
+<file path="smart-shelf-ui/src/app/app.html">
+<router-outlet></router-outlet>
+<app-toast></app-toast>
+</file>
+
+<file path="smart-shelf-ui/src/app/app.routes.server.ts">
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender
+  }
+];
+</file>
+
+<file path="smart-shelf-ui/src/app/app.routes.ts">
+import { Routes } from '@angular/router';
+import { AuthComponent } from './features/auth/auth.component';
+import { LayoutComponent } from './shared/components/layout/layout.component';
+import { CatalogComponent } from './features/catalog/catalog.component';
+import { MyItemsComponent } from './features/my-items/my-items.component';
+import { RequestsComponent } from './features/requests/requests.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
+
+export const routes: Routes = [
+  {
+    path: 'login',
+    component: AuthComponent,
+    canActivate: [guestGuard]
+  },
+
+  {
+    path: '',
+    component: LayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'catalog', component: CatalogComponent },
+      { path: 'my-items', component: MyItemsComponent },
+      { path: 'requests', component: RequestsComponent },
+      { path: '', redirectTo: 'catalog', pathMatch: 'full' }
+    ]
+  },
+
+  { path: '**', component: NotFoundComponent }
+];
+</file>
+
+<file path="smart-shelf-ui/src/app/app.scss">
+
+</file>
+
+<file path="smart-shelf-ui/src/app/app.spec.ts">
+import { TestBed } from '@angular/core/testing';
+import { App } from './app';
+
+describe('App', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+    }).compileComponents();
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it('should render title', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, smart-shelf-ui');
+  });
+});
+</file>
+
+<file path="smart-shelf-ui/src/app/app.ts">
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { ToastComponent } from './shared/components/toast/toast.component';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, ToastComponent],
+  templateUrl: './app.html',
+})
+export class App {
+  protected readonly title = signal('smart-shelf-ui');
+}
+</file>
+
+<file path="smart-shelf-ui/src/environments/environment.development.ts">
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+</file>
+
+<file path="smart-shelf-ui/src/environments/environment.ts">
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+</file>
+
+<file path="smart-shelf-ui/src/index.html">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SmartShelfUi</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+</file>
+
+<file path="smart-shelf-ui/src/main.server.ts">
+import { BootstrapContext, bootstrapApplication } from '@angular/platform-browser';
+import { App } from './app/app';
+import { config } from './app/app.config.server';
+
+const bootstrap = (context: BootstrapContext) =>
+    bootstrapApplication(App, config, context);
+
+export default bootstrap;
+</file>
+
+<file path="smart-shelf-ui/src/main.ts">
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { App } from './app/app';
+
+bootstrapApplication(App, appConfig)
+  .catch((err) => console.error(err));
+</file>
+
+<file path="smart-shelf-ui/src/server.ts">
+import {
+  AngularNodeAppEngine,
+  createNodeRequestHandler,
+  isMainModule,
+  writeResponseToNodeResponse,
+} from '@angular/ssr/node';
+import express from 'express';
+import { join } from 'node:path';
+
+const browserDistFolder = join(import.meta.dirname, '../browser');
+
+const app = express();
+const angularApp = new AngularNodeAppEngine();
+
+/**
+ * Example Express Rest API endpoints can be defined here.
+ * Uncomment and define endpoints as necessary.
+ *
+ * Example:
+ * ```ts
+ * app.get('/api/{*splat}', (req, res) => {
+ *   // Handle API request
+ * });
+ * ```
+ */
+
+/**
+ * Serve static files from /browser
+ */
+app.use(
+  express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: false,
+    redirect: false,
+  }),
+);
+
+/**
+ * Handle all other requests by rendering the Angular application.
+ */
+app.use((req, res, next) => {
+  angularApp
+    .handle(req)
+    .then((response) =>
+      response ? writeResponseToNodeResponse(response, res) : next(),
+    )
+    .catch(next);
+});
+
+/**
+ * Start the server if this module is the main entry point, or it is ran via PM2.
+ * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ */
+if (isMainModule(import.meta.url) || process.env['pm_id']) {
+  const port = process.env['PORT'] || 4000;
+  app.listen(port, (error) => {
+    if (error) {
+      throw error;
+    }
+
+    console.log(`Node Express server listening on http://localhost:${port}`);
+  });
+}
+
+/**
+ * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
+ */
+export const reqHandler = createNodeRequestHandler(app);
+</file>
+
+<file path="smart-shelf-ui/src/styles.scss">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-50 text-gray-800 font-sans antialiased m-0 p-0;
+}
+</file>
+
+<file path="smart-shelf-ui/.editorconfig">
+# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.ts]
+quote_type = single
+ij_typescript_use_double_quotes = false
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+</file>
+
+<file path="smart-shelf-ui/.gitignore">
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/
+
+# System files
+.DS_Store
+Thumbs.db
+</file>
+
+<file path="smart-shelf-ui/angular.json">
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "smart-shelf-ui": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "smart-shelf-ui:build:production"
+            },
+            "development": {
+              "buildTarget": "smart-shelf-ui:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
+    }
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/Dockerfile">
+# Этап 1: Сборка Angular
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build --configuration=production
+
+# Этап 2: Раздача статики через Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist/smart-shelf-ui/browser /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+</file>
+
+<file path="smart-shelf-ui/nginx.conf">
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+</file>
+
+<file path="smart-shelf-ui/package.json">
+{
+  "name": "smart-shelf-ui",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:smart-shelf-ui": "node dist/smart-shelf-ui/server/server.mjs"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "dependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/platform-server": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "@angular/ssr": "^21.0.4",
+    "express": "^5.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.4",
+    "@angular/cli": "^21.0.4",
+    "@angular/compiler-cli": "^21.0.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
+    "autoprefixer": "^10.4.27",
+    "jsdom": "^27.1.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}
+</file>
+
+<file path="smart-shelf-ui/README.md">
+# SmartShelfUi
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+
+## Development server
+
+To start a local development server, run:
+
+```bash
+ng serve
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+```bash
+ng generate component component-name
+```
+
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+</file>
+
+<file path="smart-shelf-ui/tailwind.config.js">
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2563eb',
+      }
+    },
+  },
+  plugins: [],
+}
+</file>
+
+<file path="smart-shelf-ui/tsconfig.app.json">
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
+}
+</file>
+
+<file path="smart-shelf-ui/tsconfig.json">
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
+</file>
+
+<file path="smart-shelf-ui/tsconfig.spec.json">
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": [
+      "vitest/globals"
+    ]
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.spec.ts"
+  ]
+}
+</file>
+
+<file path="docker-compose.yml">
+services:
+  # База данных
+  db:
+    image: postgres:15-alpine
+    container_name: smart-shelf-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: smart_shelf
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Spring Boot
+  backend:
+    build:
+      context: ./smart-shelf-backend
+      dockerfile: Dockerfile
+    container_name: smart-shelf-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/smart_shelf
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  # Angular
+  frontend:
+    build:
+      context: ./smart-shelf-ui
+      dockerfile: Dockerfile
+    container_name: smart-shelf-ui
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+</file>
+
+<file path="README.md">
+# 📚 SmartShelf (Умная Полка)
+
+![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3+-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+**SmartShelf** — это корпоративная/университетская платформа для шеринга (обмена) вещами. Проект позволяет пользователям делиться своими книгами, инструментами или настольными играми, а также брать во временное пользование вещи коллег.
+
+---
+
+## ✨ Ключевой функционал
+
+* **Умный каталог:** Мгновенный поиск по доступным вещам без перезагрузки страницы.
+* **Личный инвентарь:** Управление своими ресурсами и отслеживание их статуса (Доступна / На руках).
+* **Центр обмена (State Machine):** Полный цикл управления заявками:
+    * Отправка запроса владельцу.
+    * Одобрение или отклонение заявки владельцем.
+    * Подтверждение возврата вещи.
+* **Живые уведомления:** Индикация новых входящих заявок в реальном времени.
+
+---
+
+## 🏗 Архитектура приложения (High-Level Architecture)
+
+Проект построен по классической трехуровневой микросервисной архитектуре с разделением на Frontend и Backend.
+
+---
+
+## 🛠 Технологический стек
+
+### Backend
+* **Java 21** & **Spring Boot 3**
+* **Spring Security & JWT** (Безопасность и авторизация)
+* **Spring Data JPA / Hibernate** (Работа с БД)
+* **PostgreSQL** (Основная база данных)
+
+### Frontend
+* **Angular 17** (Standalone Components)
+* **RxJS** (Реактивное программирование и State Management)
+* **Tailwind CSS** (Стилизация и адаптивная верстка)
+
+---
+
+## 🚀 Как запустить проект локально
+
+### Быстрый запуск через Docker
+Для этого способа вам нужен только установленный Docker Desktop.
+1. Откройте терминал в корневой папке проекта (где находится файл `docker-compose.yml`).
+2. Выполните команду:
+   ```bash
+   docker-compose up --build
+   ```
+</file>
+
+</files>
