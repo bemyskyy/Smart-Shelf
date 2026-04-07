@@ -1,6 +1,6 @@
 package com.endacheva.smart_shelf.service;
 
-import com.endacheva.smart_shelf.dto.AuthRequest;
+import com.endacheva.smart_shelf.dto.record.AuthRequest;
 import com.endacheva.smart_shelf.dto.AuthResponse;
 import com.endacheva.smart_shelf.model.User;
 import com.endacheva.smart_shelf.repository.UserRepository;

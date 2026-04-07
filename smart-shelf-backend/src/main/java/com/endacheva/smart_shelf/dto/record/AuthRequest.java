@@ -1,4 +1,4 @@
-package com.endacheva.smart_shelf.dto;
+package com.endacheva.smart_shelf.dto.record;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

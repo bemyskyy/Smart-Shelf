@@ -1,6 +1,6 @@
 package com.endacheva.smart_shelf.controller;
 
-import com.endacheva.smart_shelf.dto.AuthRequest;
+import com.endacheva.smart_shelf.dto.record.AuthRequest;
 import com.endacheva.smart_shelf.dto.AuthResponse;
 import com.endacheva.smart_shelf.service.AuthService;
 import jakarta.validation.Valid;
